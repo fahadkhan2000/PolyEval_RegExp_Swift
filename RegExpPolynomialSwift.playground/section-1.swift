@@ -6,6 +6,30 @@ import Foundation
 
 class regExpPol
 {
+    class func createTermsByRegExp(poly: String) -> [String]
+    {
+        var localPoly = poly.stringByReplacingOccurrencesOfString(" " , withString: "")
+        var regexp = "([+-]?\\d*(?:\\.?\\d*))x(\\^(\\d*))?|([+-]\\d*(?:\\.?\\d*))"
+        var monomialsArray:[String] = []
+        
+        if ((localPoly.rangeOfString(regexp, options: .RegularExpressionSearch)) != nil)
+        {
+            println("matched..........")
+            monomialsArray = findAllStringsInRegexp(regexp, poly: poly)
+            
+        }
+        println(monomialsArray)
+        return (monomialsArray)
+    }
+    
+    class func findAllStringsInRegexp(regex: String, poly:String) -> [String]
+    {
+        var regex = NSRegularExpression(pattern: regex, options: nil, error: nil)
+        var polyNSString = poly as NSString
+        var matches = regex.matchesInString(poly, options: nil, range: NSMakeRange(0, polyNSString.length)) as [NSTextCheckingResult]
+        return (map(matches) {polyNSString.substringWithRange($0.range)})
+    }
+    
     class func determineTypeOfTermForSplit(singleTerm: String) -> [String]
     {
         var localString: String = singleTerm.stringByReplacingOccurrencesOfString("+", withString: "")
@@ -91,6 +115,14 @@ class regExpPol
         }
         return finalRes
     }
+    
+    class func run()
+    {
+        var poly = "100x^2 + x^3"
+        var val = 3.0
+        var monomialsArray = createTermsByRegExp(poly)
+        //calculateFinalResult(monomialsArray, val: val)
+    }
 
 }
 
@@ -102,4 +134,6 @@ regExpPol.splitTermIntoCoeffAndPower("-3x^3")
 regExpPol.convertTermFromStringToDouble(["-1.1", "-1.1"])
 
 regExpPol.evaluateTerm("+2x^11", val: 2)
+
+regExpPol.run()
 
