@@ -7,7 +7,6 @@ class regExpPol {
         var monomialsArray:[String] = []
         
         if ((localPoly.rangeOfString(regexp, options: .RegularExpressionSearch)) != nil) {
-            println("matched..........")
             monomialsArray = findAllStringsInRegexp(regexp, poly: localPoly)
         }
         return (monomialsArray)
@@ -25,7 +24,6 @@ class regExpPol {
         var reformedSingleTerm: String
         
         if(localString.rangeOfString("^") != nil) {
-            println("term with power\n")
             if(localString.hasPrefix("x") || localString.hasPrefix("-x") || localString.hasPrefix("+x"))
             {
                 reformedSingleTerm = localString.stringByReplacingOccurrencesOfString("x", withString: "1x")
@@ -36,12 +34,10 @@ class regExpPol {
             
         }
         else {
-            print("term without power\n")
             if(localString.rangeOfString("x") != nil) {
                 reformedSingleTerm = localString.stringByReplacingOccurrencesOfString("x", withString: "x^1")
             }
             else {
-                println("constant term without power\n")
                 var appender = "x^0"
                 reformedSingleTerm = localString + appender
             }
@@ -56,12 +52,10 @@ class regExpPol {
         if (localString == "x^1" || localString == "-x^1" || localString == "+x^1") {
             localString = localString.stringByReplacingOccurrencesOfString("x", withString: "1")
             splittedCoeffAndPower = split(localString) {$0 == "^"}
-            print(splittedCoeffAndPower)
         }
         else {
             localString = localString.stringByReplacingOccurrencesOfString("x", withString: "")
             splittedCoeffAndPower = split(localString) {$0 == "^"}
-            print(splittedCoeffAndPower)
         }
         return splittedCoeffAndPower
     }
