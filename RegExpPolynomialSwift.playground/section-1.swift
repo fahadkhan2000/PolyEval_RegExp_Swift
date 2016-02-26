@@ -6,11 +6,6 @@ import Foundation
 
 class regExpPol
 {
-    class func evaluateTerm(singleTerm: String , x: Double) -> Double
-    {
-     return 0
-    }
-    
     class func determineTypeOfTermForSplit(singleTerm: String) -> [String]
     {
         var localString: String = singleTerm.stringByReplacingOccurrencesOfString("+", withString: "")
@@ -48,7 +43,7 @@ class regExpPol
     
     class func splitTermIntoCoeffAndPower(reformedSingleTerm: String) -> [String]
     {
-        var splittedCoeffAndPower: [String]
+        var splittedCoeffAndPower:[String]
         var localString = reformedSingleTerm
         
         if (localString == "x^1" || localString == "-x^1" || localString == "+x^1")
@@ -65,10 +60,46 @@ class regExpPol
         }
         return splittedCoeffAndPower
     }
+    
+    class func convertTermFromStringToDouble(splittedCoeffAndPower:[String]) -> (Double, Double)
+    {
+        var localArray:[String] = splittedCoeffAndPower
+        var coeffAndExpDoubleArray:[Double] = []
+        
+        for(index, value) in enumerate(localArray)
+        {
+            coeffAndExpDoubleArray.append((localArray[index] as NSString).doubleValue)
+        }
+        println(coeffAndExpDoubleArray)
+        return(coeffAndExpDoubleArray[0], coeffAndExpDoubleArray[1])
+    }
+    
+    class func evaluateTerm(singleTerm: String , val: Double) -> Double
+    {
+        var splittedCoeffAndPower = determineTypeOfTermForSplit(singleTerm)
+        var (coeff, exp) = convertTermFromStringToDouble(splittedCoeffAndPower)
+        return (coeff * (pow(val, exp)))
+    }
+    
+    class func calculateFinalResult(monomialsArray:[String] , val:Double) -> Double
+    {
+        var finalRes:Double = 0.0
+        
+        for(index, value) in enumerate(monomialsArray)
+        {
+            finalRes = finalRes + evaluateTerm(value , val: val)
+        }
+        return finalRes
+    }
+
 }
 
 
 regExpPol.determineTypeOfTermForSplit("+1x^1")
 
 regExpPol.splitTermIntoCoeffAndPower("-3x^3")
+
+regExpPol.convertTermFromStringToDouble(["-1.1", "-1.1"])
+
+regExpPol.evaluateTerm("+2x^11", val: 2)
 
