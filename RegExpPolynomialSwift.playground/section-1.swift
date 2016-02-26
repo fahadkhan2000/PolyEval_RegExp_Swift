@@ -9,7 +9,8 @@ class regExpPol
     class func createTermsByRegExp(poly: String) -> [String]
     {
         var localPoly = poly.stringByReplacingOccurrencesOfString(" " , withString: "")
-        var regexp = "([+-]?\\d*(?:\\.?\\d*))x(\\^(\\d*))?|([+-]\\d*(?:\\.?\\d*))"
+        //var regexp2 = "([+-]?\\d*(?:\\.?\\d*))x(\\^(\\d*))?|([+-]\\d*(?:\\.?\\d*))"
+        var regexp = "([+-]?\\d*(?:\\.?\\d+))?x(\\^(\\d*))?|([+-]?\\d*(?:\\.?\\d+))"
         var monomialsArray:[String] = []
         
         if ((localPoly.rangeOfString(regexp, options: .RegularExpressionSearch)) != nil)
@@ -118,10 +119,10 @@ class regExpPol
     
     class func run()
     {
-        var poly = "100x^2 + x^3"
-        var val = 3.0
+        var poly = "3x^3 + 2x^2 + 1.1"
+        var val = 1.0
         var monomialsArray = createTermsByRegExp(poly)
-        //calculateFinalResult(monomialsArray, val: val)
+        calculateFinalResult(monomialsArray, val: val)
     }
 
 }
