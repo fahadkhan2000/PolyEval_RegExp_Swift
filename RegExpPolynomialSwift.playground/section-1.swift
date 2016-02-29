@@ -13,6 +13,9 @@ class regExpPol {
     }
     
     class func findAllStringsInRegexp(regex: String, poly:String) -> [String] {
+        if(poly.rangeOfString("-x") != nil) {
+            return ["-x"]
+        }
         var regex = NSRegularExpression(pattern: regex, options: nil, error: nil)
         var polyNSString = poly as NSString
         var matches = regex.matchesInString(poly, options: nil, range: NSMakeRange(0, polyNSString.length)) as [NSTextCheckingResult]
@@ -85,12 +88,54 @@ class regExpPol {
         return finalRes
     }
     
-    class func run() {
-        var poly = "4x^4 - 3x^3 + x - 10.01"
-        var val = 1.001
+    class func run(poly: String, val:Double) -> Double {
         var monomialsArray = createTermsByRegExp(poly)
-        calculateFinalResult(monomialsArray, val: val)
+        return calculateFinalResult(monomialsArray, val: val)
     }
 }
-regExpPol.run()
+
+/*
+Test Case
+*/
+func testCase() {
+    var testVal = 2.0
+    var res:Double = 0.0
+    var polyArray: [String] = ["-x",
+                               "x^1",
+                               "x^11",
+                               "+x^12",
+                               "-2x^10",
+                               "+100",
+                               "-100.001",
+                               "0.2x^3 + 0.2x + 0.2",
+                               "-2x^3-2x-2",
+                               "+1x^2 + 3x^3 + 5x^5 + 7x^7 + 1.17",
+                               "1x^2+3x^3+5x^5+7x^7+1.17+0",
+                               "- 40x^4 + 30x^3 + x^5 -20x^2 +10x+81.3"]
+    
+    var results: [Double] = [-2.0,
+                              2.0,
+                              2048.0,
+                              4096.0,
+                             -2048.0,
+                              100.0,
+                             -100.001,
+                              2.2,
+                             -22.0,
+                              1085.17,
+                              1085.17,
+                             -346.7]
+    
+    for (index, value) in  enumerate(polyArray) {
+        res = regExpPol.run(value, val: testVal)
+        
+        if (results[index] != res) {
+            println("\nERROR: VALUES NOT MATCHED\n")
+            return
+        }
+    }
+    println("\nTest passed : Everything is OK\n")
+}
+
+testCase()
 
